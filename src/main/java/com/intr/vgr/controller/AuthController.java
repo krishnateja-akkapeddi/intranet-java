@@ -1,4 +1,4 @@
-package com.intr.vgr.controller;
+package com.intr.vgr.config.controller;
 
 import com.intr.vgr.Exceptions.UnauthorizedEntity;
 import com.intr.vgr.dto.JwtRequest;
@@ -46,7 +46,8 @@ private AuthController(AuthService authService, JWTUtility jwtUtility ){
         return  new ResponseEntity<>("User verfied", HttpStatus.OK);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map> loginUser(@RequestBody JwtRequest request) throws Exception {
-    return authService.login(request);}
+    @PostMapping("/login/{token}")
+    public ResponseEntity<Map> loginUser(@PathVariable String token ) throws Exception {
+    System.out.println(token);
+    return authService.login(token);}
 }
