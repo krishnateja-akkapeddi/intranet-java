@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -28,9 +27,8 @@ public class Message {
     @JoinColumn(name = "receiver_user_id")
     private User receiver;
     private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
-
 
 }

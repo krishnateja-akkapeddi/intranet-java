@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -20,9 +19,7 @@ public class Role {
     @GeneratedValue(strategy = IDENTITY)
     private Long roleId;
     @NotEmpty
-    private String role;
+    private RoleType role;
     private Instant createdDate;
-
-
 
 }

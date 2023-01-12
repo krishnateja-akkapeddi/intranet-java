@@ -8,7 +8,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
+import java.util.Date;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -29,15 +29,23 @@ public class Post {
     @Nullable
     @Lob
     private String description;
-    private Integer voteCount = 0;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
-    private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name="categoryId", referencedColumnName = "categoryId")
-    private  Category category;
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
+    private Category category;
+    private Date createdDate;
+    private Date updatedDate;
+
+    @PrePersist
+    protected void onCreate() {
+        createdDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedDate = new Date();
+    }
+
 }

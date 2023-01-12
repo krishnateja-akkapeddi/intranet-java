@@ -5,11 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.time.Instant;
+
+import java.util.Date;
 import java.util.List;
 
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -20,9 +19,18 @@ public class Category {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long categoryId;
-    @NotEmpty
     private CategoryType category;
-    @OneToMany(fetch = LAZY)
-    private List<Post> posts;
-    private Instant createdDate;
+    private Date created;
+    private Date updated;
+
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
+    }
+
 }

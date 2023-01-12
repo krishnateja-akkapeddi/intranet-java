@@ -1,2 +1,9 @@
-package com.intr.vgr.model;public enum RoleType {
+package com.intr.vgr.model;
+public enum RoleType {
+    ABM,
+    TECHNICAL,
+    ZBM,
+    CEO
+
+
 }

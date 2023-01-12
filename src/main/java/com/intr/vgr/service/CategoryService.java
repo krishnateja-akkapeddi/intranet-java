@@ -1,7 +1,11 @@
 package com.intr.vgr.service;
 
-import org.springframework.http.ResponseEntity;
+import com.intr.vgr.model.Category;
 
-public interface CategoryService  {
-public ResponseEntity getAllCategories();
+import java.util.List;
+
+public interface CategoryService {
+    public List<Category> getAllCategories();
+
+    public Category create(String categoryName);
 }

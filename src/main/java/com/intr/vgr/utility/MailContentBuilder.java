@@ -1,6 +1,5 @@
-package com.intr.vgr.service;
+package com.intr.vgr.utility;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -9,14 +8,14 @@ import org.thymeleaf.context.Context;
 public class MailContentBuilder {
     private final TemplateEngine templateEngine;
 
-    private MailContentBuilder(TemplateEngine templateEngine){
+    private MailContentBuilder(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 
-    String build(String message){
+    String build(String message) {
         Context context = new Context();
         context.setVariable("message", message);
-        return  templateEngine.process("mailTemplate", context);
+        return templateEngine.process("mailTemplate", context);
     }
 
 }

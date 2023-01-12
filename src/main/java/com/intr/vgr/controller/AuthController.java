@@ -1,53 +1,43 @@
-package com.intr.vgr.config.controller;
+package com.intr.vgr.controller;
 
-import com.intr.vgr.Exceptions.UnauthorizedEntity;
-import com.intr.vgr.dto.JwtRequest;
-import com.intr.vgr.dto.RegisterRequest;
+import com.intr.vgr.ga_responses.GaResponse;
 import com.intr.vgr.service.AuthService;
-import com.intr.vgr.utility.JWTUtility;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.security.GeneralSecurityException;
 
+@RequestMapping("/auth")
 @RestController
-@RequestMapping("/api/auth")
-@Slf4j
+
 public class AuthController {
-    private  final AuthService authService;
-    private final  JWTUtility jwtUtility;
-private AuthController(AuthService authService, JWTUtility jwtUtility ){
-    this.authService = authService;
-    this.jwtUtility = jwtUtility;
-}
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestParam("email") String email,
-                                         @RequestParam("password") String password,
-                                         @RequestParam("file") MultipartFile img,
-                                         @RequestParam("name") String name
-                                        ) throws IOException {
-    RegisterRequest registerRequest = new RegisterRequest();
-    registerRequest.setEmail(email);
-    registerRequest.setPassword(password);
-    registerRequest.setName(name);
-        authService.signup(registerRequest,img);
-        return new ResponseEntity<>("User Registered ", HttpStatus.OK);
-    }
-    @GetMapping("/accountVerification/{id}")
-    public ResponseEntity<String> verifyUser(@PathVariable String id){
-    log.info("ID_RAJ",id);
-        authService.verifyAccount(id);
-        return  new ResponseEntity<>("User verfied", HttpStatus.OK);
+    @Autowired
+    AuthService authService;
+
+    @GetMapping("/login")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity login(@RequestParam("authId") String authToken) throws GeneralSecurityException, IOException {
+
+        var user = authService.loginUser(authToken);
+
+        return new GaResponse().successResponse(user);
+
     }
 
-    @PostMapping("/login/{token}")
-    public ResponseEntity<Map> loginUser(@PathVariable String token ) throws Exception {
-    System.out.println(token);
-    return authService.login(token);}
+    @GetMapping("/validate-user")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity validateUser(@RequestHeader("Authorization") String authToken) {
+        var user = authService.validateUser(authToken.substring(7));
+        System.out.println("FROM_VAL_USER" + user);
+        if (null == user) {
+            return new GaResponse().unautorizedResponse();
+        } else {
+            return new GaResponse().successResponse(user);
+        }
+
+    }
+
 }
